@@ -1,0 +1,22 @@
+{
+  "name": "@renderx-plugins/canvas-component",
+  "version": "0.1.0-rc.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts src/symphonies/**/*.ts --format esm --splitting --out-dir dist --clean --external @renderx-plugins/canvas-component --external @renderx-plugins/canvas-component/*",
+    "test": "vitest --run --config vitest.config.ts"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./symphonies/*": {
+      "import": "./src/symphonies/*"
+    }
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  }
+}
