@@ -1,1 +1,2 @@
-export * from '@renderx-plugins/canvas-component/symphonies/create/create.symphony';
+export { handlers } from "./create.stage-crew";
+

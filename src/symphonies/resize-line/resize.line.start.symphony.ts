@@ -1,1 +1,3 @@
-export * from '@renderx-plugins/canvas-component/symphonies/resize-line/resize.line.start.symphony';
+import { startLineResize } from "./resize.line.stage-crew";
+
+export const handlers = { startLineResize };

@@ -1,23 +1,57 @@
 {
   "name": "@renderx-plugins/canvas-component",
-  "version": "0.1.0-rc.0",
-  "private": false,
+  "version": "0.1.0-rc.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "json-sequences"
+  ],
   "type": "module",
+  "keywords": [
+    "renderx-plugin"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts src/symphonies/**/*.ts --format esm --splitting --out-dir dist --clean",
-    "test": "vitest --run --config vitest.config.ts"
+    "build": "npm run lint && tsup src/index.ts src/symphonies/**/*.ts --splitting --format esm --out-dir dist --clean --external react,react-dom,@renderx-plugins/host-sdk,gif.js.optimized",
+    "test": "vitest --run --config vitest.config.ts",
+    "lint": "eslint src/**/*.{ts,tsx,js,jsx} __tests__/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint src/**/*.{ts,tsx,js,jsx} __tests__/**/*.{ts,tsx,js,jsx} --fix",
+    "ci": "npm run lint && npm run build && npm run test"
   },
   "exports": {
     ".": {
-      "import": "./src/index.ts"
+      "import": "./dist/index.js"
+    },
+    "./symphonies/*.ts": {
+      "import": "./dist/symphonies/*.js"
     },
     "./symphonies/*": {
-      "import": "./src/symphonies/*"
+      "import": "./dist/symphonies/*"
     }
   },
+  "renderx": {
+    "plugins": [
+      {
+        "id": "CanvasComponentPlugin",
+        "runtime": {
+          "module": "@renderx-plugins/canvas-component",
+          "export": "register"
+        }
+      }
+    ],
+    "sequences": [
+      "json-sequences"
+    ]
+  },
   "devDependencies": {
+    "@renderx-plugins/host-sdk": "^0.3.0",
+    "@renderx-plugins/manifest-tools": "^0.1.2",
     "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "eslint": "^9.35.0",
+    "gif.js.optimized": "^1.0.1",
+    "jsdom": "^27.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"

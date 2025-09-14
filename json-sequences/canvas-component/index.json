@@ -1,0 +1,81 @@
+{
+  "version": "1.0.0",
+  "sequences": [
+    {
+      "file": "create.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "select.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "select.svg-node.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "drag.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "resize.start.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "resize.move.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "resize.end.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "import.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "export.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "export-gif.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "export-mp4.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "resize.line.start.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "resize.line.move.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "resize.line.end.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "update.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "update.svg-node.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "line.manip.start.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "line.manip.move.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "line.manip.end.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    }
+  ]
+}

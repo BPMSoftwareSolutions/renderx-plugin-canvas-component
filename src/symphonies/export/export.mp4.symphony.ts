@@ -1,1 +1,3 @@
-export * from '@renderx-plugins/canvas-component/symphonies/export/export.mp4.symphony';
+import { exportSvgToMp4 } from "./export.mp4.stage-crew";
+
+export const handlers = { exportSvgToMp4 };

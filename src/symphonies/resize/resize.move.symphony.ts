@@ -1,1 +1,3 @@
-export * from '@renderx-plugins/canvas-component/symphonies/resize/resize.move.symphony';
+import { updateSize } from "./resize.stage-crew";
+
+export const handlers = { updateSize };

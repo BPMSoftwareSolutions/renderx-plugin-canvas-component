@@ -1,1 +1,3 @@
-export * from '@renderx-plugins/canvas-component/symphonies/update/update.svg-node.symphony';
+import { updateSvgNodeAttribute, refreshControlPanel } from "./update.svg-node.stage-crew";
+
+export const handlers = { updateSvgNodeAttribute, refreshControlPanel };

@@ -1,1 +1,1 @@
-export * from '@renderx-plugins/canvas-component/symphonies/drag/drag.symphony';
+export { handlers } from "./drag.stage-crew";

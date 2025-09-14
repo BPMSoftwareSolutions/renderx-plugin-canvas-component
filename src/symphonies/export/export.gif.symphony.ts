@@ -1,1 +1,3 @@
-export * from '@renderx-plugins/canvas-component/symphonies/export/export.gif.symphony';
+import { exportSvgToGif } from "./export.gif.stage-crew";
+
+export const handlers = { exportSvgToGif };

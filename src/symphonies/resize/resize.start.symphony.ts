@@ -1,1 +1,4 @@
-export * from '@renderx-plugins/canvas-component/symphonies/resize/resize.start.symphony';
+import { startResize } from "./resize.stage-crew";
+
+export const handlers = { startResize };
+

@@ -1,1 +1,1 @@
-export * from '@renderx-plugins/canvas-component/symphonies/select/select.symphony';
+export { handlers } from "./select.stage-crew";
