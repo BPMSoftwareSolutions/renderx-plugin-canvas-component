@@ -1,2 +1,5 @@
-export { register } from '@renderx-plugins/canvas-component';
+
+export function register(_: any) {
+	// no-op for now
+}
 
