@@ -1,11 +1,34 @@
 import { ensureOverlay } from "./select.overlay.dom.stage-crew";
 import { attachResizeHandlers } from "./select.overlay.resize.stage-crew";
 import { applyOverlayRectForEl } from "./select.overlay.dom.stage-crew";
-import { useConductor, isFlagEnabled } from "@renderx-plugins/host-sdk";
+import { useConductor, isFlagEnabled, EventRouter, resolveInteraction } from "@renderx-plugins/host-sdk";
 import {
   ensureAdvancedLineOverlayFor,
   attachAdvancedLineManipHandlers,
 } from "./select.overlay.line-advanced.stage-crew";
+
+/**
+ * Topic-first selection handler: routes canvas.component.select.requested to the selection sequence
+ * This ensures data.id is always available from Beat 1 onward, making notify/publish reliable
+ */
+export async function routeSelectionRequest(data: any, ctx: any) {
+  try {
+    const id = data?.id;
+    if (!id) return;
+
+    // Route to the selection sequence with the ID
+    const r = resolveInteraction("canvas.component.select");
+    await ctx?.conductor?.play?.(r.pluginId, r.sequenceId, { id });
+  } catch {
+    // Gracefully handle routing errors
+  }
+}
+
+function deriveSelectedId(data: any): string | undefined {
+  return data?.id
+    || data?.elementId
+    || (data?.event?.target?.closest?.(".rx-comp") as HTMLElement)?.id;
+}
 
 function configureHandlesVisibility(ov: HTMLDivElement, targetEl: HTMLElement) {
   const handlesAttr = targetEl.getAttribute("data-resize-handles");
@@ -26,10 +49,10 @@ function configureHandlesVisibility(ov: HTMLDivElement, targetEl: HTMLElement) {
 }
 
 export function showSelectionOverlay(data: any, ctx?: any) {
-  const { id } = data || {};
-  if (!id) return;
+  const id = deriveSelectedId(data);
+  if (!id) return {};
   const el = document.getElementById(String(id)) as HTMLElement | null;
-  if (!el) return;
+  if (!el) return {};
 
   // Standard overlay by default; only switch to endpoint overlay when explicitly requested via data-overlay
   const overlayMode = (el.getAttribute("data-overlay") || "")
@@ -71,6 +94,9 @@ export function showSelectionOverlay(data: any, ctx?: any) {
       adv.style.display = "block";
     }
   } catch {}
+
+  // Return the ID so it's merged into the baton for subsequent beats
+  return { id };
 }
 
 export function hideSelectionOverlay() {
@@ -82,11 +108,13 @@ export function hideSelectionOverlay() {
 
 export function notifyUi(data: any, ctx: any) {
   try {
-    const { id } = data || {};
+    // Topic-first approach provides data.id, but maintain full backward compatibility
+    const overlayId = document.getElementById('rx-selection-overlay')?.dataset?.targetId;
+    const id = data?.id || ctx?.baton?.id || ctx?.baton?.elementId || ctx?.baton?.selectedId || overlayId;
     if (!id) return;
 
-    // Direct conductor.play call
-    const play = ctx?.conductor?.play;
+    // Direct conductor.play call with fallback
+    const play = (ctx?.conductor || useConductor())?.play;
     if (play) {
       play("ControlPanelPlugin", "control-panel-selection-show-symphony", { id });
     }
@@ -95,5 +123,15 @@ export function notifyUi(data: any, ctx: any) {
   }
 }
 
+export async function publishSelectionChanged(data: any, ctx: any) {
+  try {
+    // Topic-first approach provides data.id, but maintain full backward compatibility
+    const baton = ctx?.baton ?? data;
+    const overlayId = document.getElementById('rx-selection-overlay')?.dataset?.targetId;
+    const id = data?.id || baton?.id || baton?.elementId || baton?.selectedId || overlayId;
+    if (id) await EventRouter.publish("canvas.component.selection.changed", { id: String(id) }, ctx?.conductor);
+  } catch {}
+}
+
 // Export handlers for JSON sequence mounting
-export const handlers = { showSelectionOverlay, hideSelectionOverlay, notifyUi };
+export const handlers = { routeSelectionRequest, showSelectionOverlay, hideSelectionOverlay, notifyUi, publishSelectionChanged };

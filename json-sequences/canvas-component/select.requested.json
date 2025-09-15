@@ -1,0 +1,22 @@
+{
+  "pluginId": "CanvasComponentSelectionRequestPlugin",
+  "id": "canvas-component-select-requested-symphony",
+  "name": "Canvas Component Select Requested",
+  "movements": [
+    {
+      "id": "route-selection",
+      "name": "Route Selection",
+      "beats": [
+        {
+          "beat": 1,
+          "event": "canvas:component:select:route",
+          "title": "Route Selection Request",
+          "dynamics": "mf",
+          "handler": "routeSelectionRequest",
+          "timing": "immediate",
+          "kind": "pure"
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,10 @@
       "handlersPath": "@renderx-plugins/canvas-component"
     },
     {
+      "file": "select.requested.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
       "file": "select.json",
       "handlersPath": "@renderx-plugins/canvas-component"
     },
