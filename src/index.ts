@@ -1,6 +1,6 @@
 import { handlers as createHandlers } from './symphonies/create/create.stage-crew';
 import { startResize, updateSize, endResize } from './symphonies/resize/resize.stage-crew';
-import { showSelectionOverlay, hideSelectionOverlay } from './symphonies/select/select.stage-crew';
+import { showSelectionOverlay, hideSelectionOverlay, routeSelectionRequest, notifyUi as notifyUiSelection, publishSelectionChanged } from './symphonies/select/select.stage-crew';
 import { showSvgNodeOverlay } from './symphonies/select/select.svg-node.stage-crew';
 import { startLineResize, updateLine, endLineResize } from './symphonies/resize-line/resize.line.stage-crew';
 import { updatePosition, forwardToControlPanel } from './symphonies/drag/drag.stage-crew';
@@ -31,6 +31,9 @@ export const handlers = {
   showSelectionOverlay,
   hideSelectionOverlay,
   showSvgNodeOverlay,
+  routeSelectionRequest,
+  notifyUiSelection,
+  publishSelectionChanged,
   // drag
   updatePosition,
   forwardToControlPanel,
