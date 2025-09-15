@@ -82,10 +82,12 @@ The drag symphony:
 - Tree-shakable feature flags via build-time conditionals.
 
 ## Contributing (Local)
-1. Implement or adjust a handler in legacy plugin path.
-2. Run `npm run build:packages`.
-3. Execute focused tests: `npm -w @renderx-plugins/canvas-component-local run test`.
-4. Measure latency (add temporary perf logs if needed under `perf.cp.debug`).
+1. Implement or adjust a handler in the `src/symphonies` directory or other relevant source files.
+2. Run `npm run build` to build the package.
+3. Execute tests: `npm test`.
+4. Run lint checks: `npm run lint`.
+5. For development, use: `npm run dev`.
+6. Measure latency (add temporary perf logs if needed under `perf.cp.debug`).
 
 ## Testing Strategy
 Write unit tests that assert:
