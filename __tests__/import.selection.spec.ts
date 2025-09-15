@@ -12,13 +12,15 @@ vi.mock("@renderx-plugins/host-sdk", () => ({
     }
     return { pluginId: "noop", sequenceId: key };
   },
-  EventRouter: { publish: () => {} },
+  EventRouter: {
+    publish: vi.fn().mockResolvedValue(undefined),
+  },
   isFlagEnabled: () => false,
   useConductor: () => ({ play: () => {} }),
 }));
 
 import { handlers as createHandlers } from "@renderx-plugins/canvas-component/symphonies/create/create.symphony.ts";
-import { setupHostClickToSelect } from "./helpers/host-click-select";
+import { setupHostClickToSelectLegacy } from "./helpers/host-click-select";
 import { parseUiFile } from "@renderx-plugins/canvas-component/symphonies/import/import.parse.pure.ts";
 import { createComponentsSequentially, applyHierarchyAndOrder } from "@renderx-plugins/canvas-component/symphonies/import/import.nodes.stage-crew.ts";
 
@@ -123,7 +125,7 @@ describe("canvas-component import: selection forwarding", () => {
     await handlers.applyHierarchyAndOrder({}, ctx);
 
     // Host-like click routing via shared harness
-    const teardown = setupHostClickToSelect(() => ctx.conductor);
+    const teardown = setupHostClickToSelectLegacy(() => ctx.conductor);
 
     document.getElementById("b1")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(ctx.conductor.play).toHaveBeenCalled();

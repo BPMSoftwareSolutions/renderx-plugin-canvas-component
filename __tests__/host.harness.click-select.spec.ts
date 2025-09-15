@@ -11,9 +11,13 @@ vi.mock("@renderx-plugins/host-sdk", () => ({
     }
     return { pluginId: "noop", sequenceId: key } as any;
   },
+  EventRouter: {
+    publish: vi.fn().mockResolvedValue(undefined),
+  },
+  useConductor: () => ({ play: vi.fn() }),
 }));
 
-import { setupHostClickToSelect } from "./helpers/host-click-select";
+import { setupHostClickToSelectLegacy } from "./helpers/host-click-select";
 
 describe("Host-like click-to-select harness forwards to canvas.component.select", () => {
   let dispose: undefined | (() => void);
@@ -31,7 +35,7 @@ describe("Host-like click-to-select harness forwards to canvas.component.select"
     const play = vi.fn();
     const getConductor = () => ({ play });
 
-    dispose = setupHostClickToSelect(getConductor);
+    dispose = setupHostClickToSelectLegacy(getConductor);
 
     document.getElementById("b1")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
