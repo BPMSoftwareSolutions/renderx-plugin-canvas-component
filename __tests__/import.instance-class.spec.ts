@@ -1,14 +1,10 @@
 /* @vitest-environment jsdom */
 import { describe, it, expect, beforeEach, vi } from "vitest";
-
-// Mock host SDK routing and conductor for package-level tests
+// Mock host SDK routing and conductor for package-level tests (must be before importing modules that consume it)
 vi.mock("@renderx-plugins/host-sdk", () => ({
   resolveInteraction: (key: string) => {
     if (key === "canvas.component.create") {
       return { pluginId: "CanvasComponentPlugin", sequenceId: "canvas-component-create-symphony" };
-    }
-    if (key === "canvas.component.select") {
-      return { pluginId: "CanvasComponentPlugin", sequenceId: "canvas-component-select-symphony" };
     }
     return { pluginId: "noop", sequenceId: key };
   },
@@ -18,25 +14,38 @@ vi.mock("@renderx-plugins/host-sdk", () => ({
 }));
 
 import { handlers as createHandlers } from "@renderx-plugins/canvas-component/symphonies/create/create.symphony.ts";
-import { setupHostClickToSelect } from "./helpers/host-click-select";
 import { parseUiFile } from "@renderx-plugins/canvas-component/symphonies/import/import.parse.pure.ts";
+import { injectCssClasses } from "@renderx-plugins/canvas-component/symphonies/import/import.css.stage-crew.ts";
 import { createComponentsSequentially, applyHierarchyAndOrder } from "@renderx-plugins/canvas-component/symphonies/import/import.nodes.stage-crew.ts";
 
-// Backwards-compatible handlers object to minimize test changes
-const handlers = { parseUiFile, createComponentsSequentially, applyHierarchyAndOrder };
+// Backwards-compatible handlers aggregator for minimal test changes
+const handlers = { parseUiFile, injectCssClasses, createComponentsSequentially, applyHierarchyAndOrder };
+
 
 function setupCanvas() {
-  document.body.innerHTML = `<div id="rx-canvas" style="position:absolute; left:0; top:0; width:1200px; height:800px;"></div>`;
+  const root = document.createElement("div");
+  root.innerHTML = `<div id="rx-canvas" style="position:absolute; left:0; top:0; width:1200px; height:800px;"></div>`;
+  document.body.innerHTML = "";
+  document.body.appendChild(root);
 }
 
 function makeCtx() {
   const ops: any[] = [];
   return {
     payload: {},
+    io: {
+      kv: {
+        put: vi.fn(async (...a: any[]) => ops.push(["kv.put", ...a])),
+      },
+    },
+    logger: {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    },
     conductor: {
-      play: vi.fn(async (pluginId: string, sequenceId: string, data: any) => {
-        ops.push(["conductor.play", pluginId, sequenceId, data]);
-        // Mock the canvas.component.create behavior for testing
+      play: vi.fn(async (_pluginId: string, sequenceId: string, data: any) => {
+        ops.push(["conductor.play", _pluginId, sequenceId, data]);
         if (sequenceId === "canvas-component-create-symphony") {
           const createCtx = {
             payload: {},
@@ -45,7 +54,7 @@ function makeCtx() {
                 put: vi.fn(async (...a: any[]) => ops.push(["kv.put", ...a])),
               },
             },
-          };
+          } as any;
           await createHandlers.resolveTemplate(data, createCtx);
           await createHandlers.registerInstance(data, createCtx);
           await createHandlers.createNode(data, createCtx);
@@ -53,41 +62,57 @@ function makeCtx() {
         }
       }),
     },
-    logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
     _ops: ops,
   } as any;
 }
 
-describe("canvas-component import: selection forwarding", () => {
-  beforeEach(setupCanvas);
+describe("import flow injects instance class on DOM elements", () => {
+  beforeEach(() => setupCanvas());
 
-  it("clicking imported node plays canvas.component.select", async () => {
+  it("adds rx-comp-<tag>-<id> class for imported components", async () => {
     const ctx = makeCtx();
-    ctx.payload.uiFileContent = {
+    const ui = {
       version: "1.0.0",
       metadata: {},
-      cssClasses: {},
+      cssClasses: {
+        "rx-comp": {
+          name: "rx-comp",
+          content: ".rx-comp { position: absolute; box-sizing: border-box; }",
+        },
+        "rx-button": {
+          name: "rx-button",
+          content: ".rx-button { background: #3b82f6; color: white; }",
+        },
+        "rx-container": {
+          name: "rx-container",
+          content: ".rx-container { position: relative; }",
+        },
+      },
       components: [
         {
-          id: "c1",
+          id: "container-1",
           type: "container",
-          template: { tag: "div", classRefs: ["rx-comp", "rx-container"] },
-          layout: { x: 0, y: 0, width: 200, height: 100 },
+          template: { tag: "div", classRefs: ["rx-container"], style: {} },
+          layout: { x: 0, y: 0, width: 300, height: 200 },
           parentId: null,
           siblingIndex: 0,
         },
         {
-          id: "b1",
+          id: "btn-1",
           type: "button",
-          template: { tag: "button", classRefs: ["rx-comp", "rx-button"] },
-          layout: { x: 10, y: 10, width: 80, height: 30 },
-          parentId: "c1",
+          template: { tag: "button", classRefs: ["rx-button"], style: {} },
+          content: { text: "Hello" },
+          layout: { x: 10, y: 20, width: 120, height: 40 },
+          parentId: "container-1",
           siblingIndex: 0,
         },
       ],
-    };
+    } as any;
+
+    ctx.payload.uiFileContent = ui;
 
     await handlers.parseUiFile({}, ctx);
+    await handlers.injectCssClasses({}, ctx);
 
     // Create components directly (bypass resolveInteraction mapping in tests)
     for (const comp of ctx.payload.importComponents || []) {
@@ -122,12 +147,18 @@ describe("canvas-component import: selection forwarding", () => {
 
     await handlers.applyHierarchyAndOrder({}, ctx);
 
-    // Host-like click routing via shared harness
-    const teardown = setupHostClickToSelect(() => ctx.conductor);
+    const container = document.getElementById("container-1") as HTMLElement;
+    const button = document.getElementById("btn-1") as HTMLElement;
 
-    document.getElementById("b1")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    expect(ctx.conductor.play).toHaveBeenCalled();
-    teardown();
+    expect(container).toBeTruthy();
+    expect(button).toBeTruthy();
+
+    // compute expected instance classes
+    const containerInstance = `rx-comp-div-container-1`;
+    const buttonInstance = `rx-comp-button-btn-1`;
+
+    expect(container.classList.contains(containerInstance)).toBe(true);
+    expect(button.classList.contains(buttonInstance)).toBe(true);
   });
 });
 

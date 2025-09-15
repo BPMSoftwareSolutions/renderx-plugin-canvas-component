@@ -13,7 +13,7 @@ export function setupHostClickToSelect(getConductor: () => any) {
       conductor?.play?.(r.pluginId, r.sequenceId, { id });
     } catch {}
   };
-  document.body.addEventListener("click", handler);
-  return () => document.body.removeEventListener("click", handler);
+  document.body.addEventListener("click", handler, true);
+  return () => document.body.removeEventListener("click", handler, true);
 }
 

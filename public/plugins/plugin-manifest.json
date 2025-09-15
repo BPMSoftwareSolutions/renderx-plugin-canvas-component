@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    {
+      "id": "CanvasComponentPlugin",
+      "runtime": {
+        "module": "@renderx-plugins/canvas-component",
+        "export": "register"
+      }
+    }
+  ]
+}

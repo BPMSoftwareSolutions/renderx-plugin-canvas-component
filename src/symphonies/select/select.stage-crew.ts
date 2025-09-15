@@ -80,5 +80,20 @@ export function hideSelectionOverlay() {
   if (ov) ov.style.display = "none";
 }
 
+export function notifyUi(data: any, ctx: any) {
+  try {
+    const { id } = data || {};
+    if (!id) return;
+
+    // Direct conductor.play call
+    const play = ctx?.conductor?.play;
+    if (play) {
+      play("ControlPanelPlugin", "control-panel-selection-show-symphony", { id });
+    }
+  } catch {
+    // Gracefully handle any errors
+  }
+}
+
 // Export handlers for JSON sequence mounting
-export const handlers = { showSelectionOverlay, hideSelectionOverlay };
+export const handlers = { showSelectionOverlay, hideSelectionOverlay, notifyUi };

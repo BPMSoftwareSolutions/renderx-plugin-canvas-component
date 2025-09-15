@@ -16,12 +16,23 @@ export function discoverComponentsFromDom(_data: any, ctx: any) {
       const typeClass = classes.find((cls) => cls.startsWith("rx-") && cls !== "rx-comp");
       const type = typeClass ? typeClass.replace("rx-", "") : htmlEl.tagName.toLowerCase();
 
-      found.push({
+      const component: any = {
         id: htmlEl.id,
         type,
         classes,
         createdAt: Date.now(),
-      });
+      };
+
+      // Capture text content if present
+      const textContent = htmlEl.textContent?.trim();
+      if (textContent) {
+        component.content = {
+          content: textContent,
+          text: textContent
+        };
+      }
+
+      found.push(component);
     }
 
     if (found.length > 0) {
