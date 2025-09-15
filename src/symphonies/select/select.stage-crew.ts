@@ -16,11 +16,19 @@ export async function routeSelectionRequest(data: any, ctx: any) {
     const id = data?.id;
     if (!id) return;
 
+    // Get conductor with fallback to global conductor
+    const conductor = ctx?.conductor || useConductor() || (window as any).RenderX?.conductor;
+    if (!conductor?.play) {
+      console.warn("No conductor available for selection routing");
+      return;
+    }
+
     // Route to the selection sequence with the ID
     const r = resolveInteraction("canvas.component.select");
-    await ctx?.conductor?.play?.(r.pluginId, r.sequenceId, { id });
-  } catch {
+    await conductor.play(r.pluginId, r.sequenceId, { id });
+  } catch (error) {
     // Gracefully handle routing errors
+    console.warn("Selection routing error:", error);
   }
 }
 
