@@ -19,7 +19,7 @@ export async function routeSelectionRequest(data: any, ctx: any) {
     // Get conductor with fallback to global conductor
     const conductor = ctx?.conductor || useConductor() || (window as any).RenderX?.conductor;
     if (!conductor?.play) {
-      console.warn("No conductor available for selection routing");
+      ctx.logger?.warn?.("No conductor available for selection routing");
       return;
     }
 
@@ -28,7 +28,7 @@ export async function routeSelectionRequest(data: any, ctx: any) {
     await conductor.play(r.pluginId, r.sequenceId, { id });
   } catch (error) {
     // Gracefully handle routing errors
-    console.warn("Selection routing error:", error);
+    ctx.logger?.warn?.("Selection routing error:", error);
   }
 }
 
