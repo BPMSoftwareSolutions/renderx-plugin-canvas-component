@@ -30,6 +30,14 @@
       "handlersPath": "@renderx-plugins/canvas-component"
     },
     {
+      "file": "delete.requested.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "delete.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
       "file": "drag.json",
       "handlersPath": "@renderx-plugins/canvas-component"
     },
