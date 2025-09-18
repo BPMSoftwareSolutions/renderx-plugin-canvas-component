@@ -1,0 +1,15 @@
+{
+  "pluginId": "CanvasComponentDeleteRequestPlugin",
+  "id": "canvas-component-delete-requested-symphony",
+  "name": "Canvas Component Delete Requested",
+  "movements": [
+    {
+      "id": "route-delete",
+      "name": "Route Delete",
+      "beats": [
+        { "beat": 1, "event": "canvas:component:delete:route", "title": "Route Delete Request", "dynamics": "mf", "handler": "routeDeleteRequest", "timing": "immediate", "kind": "pure" }
+      ]
+    }
+  ]
+}
+
