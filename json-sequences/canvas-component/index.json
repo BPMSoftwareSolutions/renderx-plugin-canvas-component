@@ -18,6 +18,18 @@
       "handlersPath": "@renderx-plugins/canvas-component"
     },
     {
+      "file": "deselect.requested.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "deselect.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "deselect-all.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
       "file": "drag.json",
       "handlersPath": "@renderx-plugins/canvas-component"
     },

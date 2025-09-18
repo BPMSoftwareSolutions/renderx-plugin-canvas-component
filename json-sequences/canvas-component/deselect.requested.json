@@ -1,0 +1,23 @@
+{
+  "pluginId": "CanvasComponentDeselectionRequestPlugin",
+  "id": "canvas-component-deselect-requested-symphony",
+  "name": "Canvas Component Deselect Requested",
+  "movements": [
+    {
+      "id": "route-deselection",
+      "name": "Route Deselection",
+      "beats": [
+        {
+          "beat": 1,
+          "event": "canvas:component:deselect:route",
+          "title": "Route Deselection Request",
+          "dynamics": "mf",
+          "handler": "routeDeselectionRequest",
+          "timing": "immediate",
+          "kind": "pure"
+        }
+      ]
+    }
+  ]
+}
+

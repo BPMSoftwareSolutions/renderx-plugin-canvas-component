@@ -1,0 +1,16 @@
+{
+  "pluginId": "CanvasComponentDeselectionPlugin",
+  "id": "canvas-component-deselect-symphony",
+  "name": "Canvas Component Deselect",
+  "movements": [
+    {
+      "id": "deselect",
+      "name": "Deselect",
+      "beats": [
+        { "beat": 1, "event": "canvas:component:deselect", "title": "Hide Overlays for ID", "dynamics": "mf", "handler": "deselectComponent", "timing": "immediate", "kind": "stage-crew" },
+        { "beat": 2, "event": "canvas:component:deselection:changed", "title": "Publish Deselection Changed", "dynamics": "mf", "handler": "publishDeselectionChanged", "timing": "immediate", "kind": "pure" }
+      ]
+    }
+  ]
+}
+

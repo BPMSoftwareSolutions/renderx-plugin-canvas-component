@@ -21,6 +21,7 @@ import { exportSvgToGif } from './symphonies/export/export.gif.stage-crew';
 import { exportSvgToMp4 } from './symphonies/export/export.mp4.stage-crew';
 import { updateSvgNodeAttribute } from './symphonies/update/update.svg-node.stage-crew';
 import { startLineManip, moveLineManip, endLineManip } from './symphonies/line-advanced/line.manip.stage-crew';
+import { hideAllOverlays, deselectComponent, publishDeselectionChanged, publishSelectionsCleared, routeDeselectionRequest as routeDeselectionRequestDeselection } from './symphonies/deselect/deselect.stage-crew';
 
 // Minimal merged handlers to support JSON-mounted sequences
 export const handlers = {
@@ -34,6 +35,12 @@ export const handlers = {
   routeSelectionRequest,
   notifyUiSelection,
   publishSelectionChanged,
+  // deselect
+  hideAllOverlays,
+  deselectComponent,
+  publishDeselectionChanged,
+  publishSelectionsCleared,
+  routeDeselectionRequest: routeDeselectionRequestDeselection,
   // drag
   updatePosition,
   forwardToControlPanel,
