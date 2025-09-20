@@ -1,5 +1,5 @@
 {
-  "pluginId": "CanvasComponentSelectionPlugin",
+  "pluginId": "CanvasComponentPlugin",
   "id": "canvas-component-select-symphony",
   "name": "Canvas Component Select",
   "movements": [
