@@ -13,6 +13,9 @@ import {
  */
 export async function routeSelectionRequest(data: any, ctx: any) {
   try {
+    // Guard against accidental re-entry loops
+    if (data?._routed === true) return;
+
     const id = data?.id;
     if (!id) return;
 
@@ -23,9 +26,9 @@ export async function routeSelectionRequest(data: any, ctx: any) {
       return;
     }
 
-    // Route to the selection sequence with the ID
+    // Route to the selection sequence with the ID and mark as routed
     const r = resolveInteraction("canvas.component.select");
-    await conductor.play(r.pluginId, r.sequenceId, { id });
+    await conductor.play(r.pluginId, r.sequenceId, { id, _routed: true });
   } catch (error) {
     // Gracefully handle routing errors
     ctx.logger?.warn?.("Selection routing error:", error);
