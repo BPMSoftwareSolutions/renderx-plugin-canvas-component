@@ -59,7 +59,7 @@ describe("Topic-first selection approach", () => {
       expect(mockConductor.play).toHaveBeenCalledWith(
         "CanvasComponentPlugin",
         "canvas-component-select-symphony",
-        { id: "rx-node-button123" }
+        { id: "rx-node-button123", _routed: true }
       );
     });
 
@@ -156,7 +156,7 @@ describe("Topic-first selection approach", () => {
       expect(mockConductor.play).toHaveBeenCalledWith(
         "CanvasComponentPlugin",
         "canvas-component-select-symphony",
-        { id: "rx-node-button123" }
+        { id: "rx-node-button123", _routed: true }
       );
 
       // Step 3: Selection sequence runs with guaranteed ID
