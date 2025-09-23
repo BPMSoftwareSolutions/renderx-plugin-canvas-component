@@ -1,5 +1,5 @@
 {
-  "pluginId": "CanvasComponentPlugin",
+  "pluginId": "CanvasComponentResizeStartPlugin",
   "id": "canvas-component-resize-start-symphony",
   "name": "Canvas Component Resize Start",
   "movements": [
