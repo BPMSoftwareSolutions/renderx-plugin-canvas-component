@@ -1,5 +1,5 @@
 {
-  "pluginId": "CanvasComponentPlugin",
+  "pluginId": "CanvasLineResizeMovePlugin",
   "id": "canvas-line-resize-move-symphony",
   "name": "Canvas Line Resize Move",
   "movements": [

@@ -1,5 +1,5 @@
 {
-  "pluginId": "CanvasComponentPlugin",
+  "pluginId": "CanvasComponentSvgNodeUpdatePlugin",
   "id": "canvas-component-update-svg-node-symphony",
   "name": "Canvas Component Update SVG Node",
   "movements": [
