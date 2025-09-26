@@ -1,6 +1,6 @@
 {
   "name": "@renderx-plugins/canvas-component",
-  "version": "0.1.0-rc.15",
+  "version": "0.1.0-rc.20",
   "publishConfig": {
     "access": "public"
   },
@@ -45,7 +45,7 @@
     ]
   },
   "devDependencies": {
-    "@renderx-plugins/host-sdk": "^0.3.0",
+    "@renderx-plugins/host-sdk": "^1.0.4-rc.0",
     "@renderx-plugins/manifest-tools": "^0.1.2",
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
