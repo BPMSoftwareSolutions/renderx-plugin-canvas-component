@@ -100,6 +100,14 @@
     {
       "file": "line.manip.end.json",
       "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "copy.requested.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "paste.requested.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
     }
   ]
 }
