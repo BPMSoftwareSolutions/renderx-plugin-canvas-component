@@ -20,6 +20,7 @@ import { handlers as selectHandlers } from "@renderx-plugins/canvas-component/sy
 import { handlers as copyHandlers } from "@renderx-plugins/canvas-component/symphonies/copy/copy.symphony.ts";
 import { handlers as pasteHandlers } from "@renderx-plugins/canvas-component/symphonies/paste/paste.symphony.ts";
 
+
 function setupCanvas() {
   const root = document.createElement("div");
   root.innerHTML = `<div id="rx-canvas" style="position:absolute; left:0; top:0; width:1200px; height:800px;"></div>`;
@@ -187,6 +188,29 @@ describe("canvas-component copy/paste", () => {
     const payload = lastPlay[3];
     expect(typeof payload?.position?.x).toBe("number");
     expect(typeof payload?.position?.y).toBe("number");
+  });
+
+  it("falls back to persisted clipboard when system clipboard is empty", async () => {
+    const ctx = makeCtx();
+
+    await createButton(ctx, "btn-1", { x: 12, y: 18 });
+    selectHandlers.showSelectionOverlay({ id: "btn-1" }, ctx);
+
+    // System clipboard returns empty
+    (navigator as any).clipboard.readText = vi.fn(async () => "");
+
+    // Run copy to populate buffers (should also persist to storage)
+    const baton1 = await copyHandlers.serializeSelectedComponent({}, ctx);
+    await copyHandlers.copyToClipboard(baton1, ctx);
+
+    // Paste should recover from persisted clipboard
+    const b1 = await pasteHandlers.readFromClipboard({}, ctx);
+    const b2 = await pasteHandlers.deserializeComponentData(b1, ctx);
+    const b3 = await pasteHandlers.calculatePastePosition(b2, ctx);
+    await pasteHandlers.createPastedComponent(b3, ctx);
+
+    const plays = ctx._ops.filter((o: any[]) => o[0] === "conductor.play");
+    expect(plays.length).toBeGreaterThan(0);
   });
 
 });
