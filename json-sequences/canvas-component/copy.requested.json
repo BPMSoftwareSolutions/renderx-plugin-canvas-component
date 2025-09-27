@@ -1,0 +1,38 @@
+{
+  "pluginId": "CanvasComponentCopyPlugin",
+  "id": "canvas-component-copy-requested-symphony",
+  "name": "Canvas Component Copy Requested",
+  "movements": [
+    {
+      "id": "copy-to-clipboard",
+      "name": "Copy to Clipboard",
+      "beats": [
+        {
+          "beat": 1,
+          "event": "canvas:component:copy:serialize",
+          "title": "Serialize Component Data",
+          "handler": "serializeSelectedComponent",
+          "timing": "immediate",
+          "kind": "pure"
+        },
+        {
+          "beat": 2,
+          "event": "canvas:component:copy:clipboard",
+          "title": "Copy to Clipboard",
+          "handler": "copyToClipboard",
+          "timing": "immediate",
+          "kind": "io"
+        },
+        {
+          "beat": 3,
+          "event": "canvas:component:copy:notify",
+          "title": "Notify Copy Complete",
+          "handler": "notifyCopyComplete",
+          "timing": "immediate",
+          "kind": "pure"
+        }
+      ]
+    }
+  ]
+}
+

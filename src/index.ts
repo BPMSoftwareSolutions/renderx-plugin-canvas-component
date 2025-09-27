@@ -23,6 +23,9 @@ import { updateSvgNodeAttribute } from './symphonies/update/update.svg-node.stag
 import { startLineManip, moveLineManip, endLineManip } from './symphonies/line-advanced/line.manip.stage-crew';
 import { hideAllOverlays, deselectComponent, publishDeselectionChanged, publishSelectionsCleared, routeDeselectionRequest as routeDeselectionRequestDeselection } from './symphonies/deselect/deselect.stage-crew';
 import { deleteComponent, publishDeleted, routeDeleteRequest as routeDeleteRequestDelete } from './symphonies/delete/delete.stage-crew';
+import { serializeSelectedComponent, copyToClipboard, notifyCopyComplete } from './symphonies/copy/copy.stage-crew';
+import { readFromClipboard, deserializeComponentData, calculatePastePosition, createPastedComponent, notifyPasteComplete } from './symphonies/paste/paste.stage-crew';
+
 
 // Minimal merged handlers to support JSON-mounted sequences
 export const handlers = {
@@ -43,6 +46,16 @@ export const handlers = {
   publishSelectionsCleared,
   routeDeselectionRequest: routeDeselectionRequestDeselection,
   // delete
+  // copy/paste
+  serializeSelectedComponent,
+  copyToClipboard,
+  notifyCopyComplete,
+  readFromClipboard,
+  deserializeComponentData,
+  calculatePastePosition,
+  createPastedComponent,
+  notifyPasteComplete,
+
   deleteComponent,
   publishDeleted,
   routeDeleteRequest: routeDeleteRequestDelete,

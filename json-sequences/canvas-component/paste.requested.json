@@ -1,0 +1,54 @@
+{
+  "pluginId": "CanvasComponentPastePlugin",
+  "id": "canvas-component-paste-requested-symphony",
+  "name": "Canvas Component Paste Requested",
+  "movements": [
+    {
+      "id": "paste-from-clipboard",
+      "name": "Paste from Clipboard",
+      "beats": [
+        {
+          "beat": 1,
+          "event": "canvas:component:paste:clipboard",
+          "title": "Read from Clipboard",
+          "handler": "readFromClipboard",
+          "timing": "immediate",
+          "kind": "io"
+        },
+        {
+          "beat": 2,
+          "event": "canvas:component:paste:deserialize",
+          "title": "Deserialize Component Data",
+          "handler": "deserializeComponentData",
+          "timing": "immediate",
+          "kind": "pure"
+        },
+        {
+          "beat": 3,
+          "event": "canvas:component:paste:position",
+          "title": "Calculate Paste Position",
+          "handler": "calculatePastePosition",
+          "timing": "immediate",
+          "kind": "pure"
+        },
+        {
+          "beat": 4,
+          "event": "canvas:component:paste:create",
+          "title": "Create Pasted Component",
+          "handler": "createPastedComponent",
+          "timing": "immediate",
+          "kind": "stage-crew"
+        },
+        {
+          "beat": 5,
+          "event": "canvas:component:paste:notify",
+          "title": "Notify Paste Complete",
+          "handler": "notifyPasteComplete",
+          "timing": "immediate",
+          "kind": "pure"
+        }
+      ]
+    }
+  ]
+}
+
