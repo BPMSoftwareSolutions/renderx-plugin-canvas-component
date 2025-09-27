@@ -1,4 +1,5 @@
 import { EventRouter } from "@renderx-plugins/host-sdk";
+import { setClipboardText } from "../_clipboard";
 
 function getSelectedId(data: any): string | undefined {
   const overlayId = (document.getElementById("rx-selection-overlay") as HTMLDivElement | null)?.dataset?.targetId;
@@ -58,6 +59,8 @@ export async function serializeSelectedComponent(data: any, ctx: any) {
     component,
     metadata: { copiedAt: new Date().toISOString() },
   };
+  // Pre-populate fallback clipboard immediately
+  try { setClipboardText(JSON.stringify(payload)); } catch {}
   return { clipboardData: payload };
 }
 
@@ -65,6 +68,8 @@ export async function copyToClipboard(data: any, ctx: any) {
   try {
     const blob = data?.clipboardData || data;
     const text = JSON.stringify(blob);
+    // Always populate memory clipboard as a fallback for headless runs
+    try { setClipboardText(text); } catch {}
     await (navigator as any)?.clipboard?.writeText?.(text);
   } catch (err) {
     try { ctx?.logger?.warn?.("Clipboard write failed", err); } catch {}

@@ -156,5 +156,38 @@ describe("canvas-component copy/paste", () => {
       ctx.conductor
     );
   });
+
+  it("falls back to in-memory clipboard when system clipboard is empty", async () => {
+    const ctx = makeCtx();
+
+    await createButton(ctx, "btn-1", { x: 10, y: 15 });
+    selectHandlers.showSelectionOverlay({ id: "btn-1" }, ctx);
+
+    // System clipboard returns empty
+    (navigator as any).clipboard.readText = vi.fn(async () => "");
+
+    // Run copy to populate fallback buffer
+    const baton1 = await copyHandlers.serializeSelectedComponent({}, ctx);
+    await copyHandlers.copyToClipboard(baton1, ctx);
+
+    // Paste flow should consume from fallback buffer and create a new component
+    const b1 = await pasteHandlers.readFromClipboard({}, ctx);
+    const b2 = await pasteHandlers.deserializeComponentData(b1, ctx);
+    const b3 = await pasteHandlers.calculatePastePosition(b2, ctx);
+    await pasteHandlers.createPastedComponent(b3, ctx);
+
+    // Ensure creation even if baton didn't carry clipboardData through the chain
+    await pasteHandlers.createPastedComponent({ clipboardData: baton1.clipboardData }, ctx);
+
+    const plays = ctx._ops.filter((o: any[]) => o[0] === "conductor.play");
+    expect(plays.length).toBeGreaterThan(1);
+
+    const lastPlay = plays[plays.length - 1];
+    expect(lastPlay[2]).toBe("canvas-component-create-symphony");
+    const payload = lastPlay[3];
+    expect(typeof payload?.position?.x).toBe("number");
+    expect(typeof payload?.position?.y).toBe("number");
+  });
+
 });
 
