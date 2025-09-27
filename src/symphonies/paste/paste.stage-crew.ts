@@ -1,5 +1,6 @@
 import { EventRouter, resolveInteraction } from "@renderx-plugins/host-sdk";
 import { getClipboardText } from "../_clipboard";
+import { toCreatePayloadFromData } from "../create/create.from-import";
 
 function _getSelectedId(data: any): string | undefined {
   const overlayId = (document.getElementById("rx-selection-overlay") as HTMLDivElement | null)?.dataset?.targetId;
@@ -87,15 +88,17 @@ export async function createPastedComponent(data: any, ctx: any) {
         } catch {}
       }
     }
-    const template = comp?.template;
-    const base = comp?.position || { x: 0, y: 0 };
+    // Build payload using unified data→create helper
+    const payload = toCreatePayloadFromData(comp);
+    // Override position with computed offset for paste
+    const base = comp?.position || payload?.position || { x: 0, y: 0 };
     let position = data?.newPosition ?? { x: (base.x || 0) + 20, y: (base.y || 0) + 20 };
-    // Defensive: if somehow position equals original, bump by +20/+20
     if (comp?.position && position.x === comp.position.x && position.y === comp.position.y) {
       position = { x: position.x + 20, y: position.y + 20 };
     }
-    if (!template) return;
-    const payload = { component: { template }, position };
+    payload.position = position;
+    // Ensure we do not preserve original ID on paste
+    if ("_overrideNodeId" in payload) delete (payload as any)._overrideNodeId;
     const r = resolveInteraction("canvas.component.create");
     await ctx?.conductor?.play?.(r.pluginId, r.sequenceId, payload);
   } catch (err) {
