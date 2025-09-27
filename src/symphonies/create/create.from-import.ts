@@ -73,8 +73,14 @@ export async function createFromImportRecord(importComponent: any, ctx: any) {
 
 // Transform a clipboard-shaped component (from copy/DOM serialize) to create payload
 export function transformClipboardToCreatePayload(clipComponent: any) {
-  const template = clipComponent?.template || {};
-  const position = clipComponent?.position || { x: 0, y: 0 };
+  // Handle nested clipboard structure: {type, version, component: {template, position}}
+  let actualComponent = clipComponent;
+  if (clipComponent?.type === "renderx-component" && clipComponent?.component) {
+    actualComponent = clipComponent.component;
+  }
+
+  const template = actualComponent?.template || {};
+  const position = actualComponent?.position || { x: 0, y: 0 };
   const payload: any = { component: { template }, position };
   // Note: Do NOT preserve original ID on paste
   return payload;
@@ -86,8 +92,8 @@ export function toCreatePayloadFromData(input: any) {
   if (input && (input.tag || input.classRefs || input.layout)) {
     return transformImportToCreatePayload(input);
   }
-  // Clipboard record has template/position
-  if (input && (input.template || input.position)) {
+  // Clipboard record has template/position OR renderx-component wrapper
+  if (input && (input.template || input.position || input.type === "renderx-component")) {
     return transformClipboardToCreatePayload(input);
   }
   // Fallback to empty template

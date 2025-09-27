@@ -23,5 +23,19 @@ describe("transformClipboardToCreatePayload", () => {
     expect(out.component?.template?.tag).toBe("div");
     expect(out.position).toEqual({ x: 0, y: 0 });
   });
+
+  it("handles renderx-component wrapper structure", () => {
+    const clipboardWrapper = {
+      type: "renderx-component",
+      version: "1.0",
+      component: {
+        template: { tag: "button", classes: ["rx-button"], text: "Click me" },
+        position: { x: 50, y: 75 }
+      }
+    };
+    const out = transformClipboardToCreatePayload(clipboardWrapper);
+    expect(out.component.template).toEqual({ tag: "button", classes: ["rx-button"], text: "Click me" });
+    expect(out.position).toEqual({ x: 50, y: 75 });
+  });
 });
 

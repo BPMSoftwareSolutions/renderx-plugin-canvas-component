@@ -71,25 +71,43 @@ export async function calculatePastePosition(data: any, _ctx: any) {
 export async function createPastedComponent(data: any, ctx: any) {
   try {
     let comp = data?.clipboardData?.component;
+    let clipboardObj: any = null;
+
     // Fallback parse from memory clipboard if component missing
     if (!comp) {
       // Try memory clipboard JSON
       try {
         const raw = getClipboardText();
-        const obj = JSON.parse(String(raw || ""));
-        if (obj && obj.type === "renderx-component") comp = obj.component;
+        clipboardObj = JSON.parse(String(raw || ""));
+        if (clipboardObj && clipboardObj.type === "renderx-component") {
+          comp = clipboardObj; // Pass full clipboard object to transformer
+          ctx?.logger?.info?.("Using memory clipboard component", { comp });
+        }
       } catch {}
       // As a last resort, if a selection exists, reconstruct a minimal component from DOM
       if (!comp) {
         try {
           const id = _getSelectedId(data);
           const el = id ? (document.getElementById(String(id)) as HTMLElement | null) : null;
-          if (el) comp = _serializeElementFallback(el, String(id));
+          if (el) {
+            comp = _serializeElementFallback(el, String(id));
+            ctx?.logger?.info?.("Using DOM fallback component", { comp });
+          }
         } catch {}
       }
+    } else {
+      ctx?.logger?.info?.("Using clipboardData component", { comp });
     }
+
+    if (!comp) {
+      ctx?.logger?.warn?.("No component data found for paste");
+      return;
+    }
+
     // Build payload using unified data→create helper
     const payload = toCreatePayloadFromData(comp);
+    ctx?.logger?.info?.("Transformed payload", { payload });
+
     // Override position with computed offset for paste
     const base = comp?.position || payload?.position || { x: 0, y: 0 };
     let position = data?.newPosition ?? { x: (base.x || 0) + 20, y: (base.y || 0) + 20 };
@@ -99,7 +117,9 @@ export async function createPastedComponent(data: any, ctx: any) {
     payload.position = position;
     // Ensure we do not preserve original ID on paste
     if ("_overrideNodeId" in payload) delete (payload as any)._overrideNodeId;
+
     const r = resolveInteraction("canvas.component.create");
+    ctx?.logger?.info?.("Calling canvas.component.create", { pluginId: r.pluginId, sequenceId: r.sequenceId, payload });
     await ctx?.conductor?.play?.(r.pluginId, r.sequenceId, payload);
   } catch (err) {
     try { ctx?.logger?.warn?.("Create pasted component failed", err); } catch {}
