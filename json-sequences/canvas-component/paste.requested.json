@@ -11,6 +11,7 @@
           "beat": 1,
           "event": "canvas:component:paste:clipboard",
           "title": "Read from Clipboard",
+          "dynamics": "mf",
           "handler": "readFromClipboard",
           "timing": "immediate",
           "kind": "io"
@@ -19,6 +20,7 @@
           "beat": 2,
           "event": "canvas:component:paste:deserialize",
           "title": "Deserialize Component Data",
+          "dynamics": "mf",
           "handler": "deserializeComponentData",
           "timing": "immediate",
           "kind": "pure"
@@ -27,6 +29,7 @@
           "beat": 3,
           "event": "canvas:component:paste:position",
           "title": "Calculate Paste Position",
+          "dynamics": "mf",
           "handler": "calculatePastePosition",
           "timing": "immediate",
           "kind": "pure"
@@ -35,6 +38,7 @@
           "beat": 4,
           "event": "canvas:component:paste:create",
           "title": "Create Pasted Component",
+          "dynamics": "mf",
           "handler": "createPastedComponent",
           "timing": "immediate",
           "kind": "stage-crew"
@@ -43,6 +47,7 @@
           "beat": 5,
           "event": "canvas:component:paste:notify",
           "title": "Notify Paste Complete",
+          "dynamics": "mf",
           "handler": "notifyPasteComplete",
           "timing": "immediate",
           "kind": "pure"
