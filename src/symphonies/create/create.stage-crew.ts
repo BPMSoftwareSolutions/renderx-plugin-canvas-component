@@ -22,6 +22,7 @@ import { resolveTemplate } from "./create.arrangement";
 import { registerInstance } from "./create.io";
 import { notifyUi } from "./create.notify";
 import { enhanceLine } from "../augment/augment.line.stage-crew";
+import { renderReact } from "./create.react.stage-crew";
 
 const _ruleEngine = new ComponentRuleEngine();
 
@@ -167,6 +168,7 @@ export const handlers = {
   resolveTemplate,
   registerInstance,
   createNode,
+  renderReact,
   notifyUi,
   enhanceLine,
 };

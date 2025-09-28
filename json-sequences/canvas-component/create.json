@@ -36,6 +36,15 @@
         },
         {
           "beat": 4,
+          "event": "canvas:component:render-react",
+          "title": "Render React Component",
+          "dynamics": "mf",
+          "handler": "renderReact",
+          "timing": "immediate",
+          "kind": "stage-crew"
+        },
+        {
+          "beat": 5,
           "event": "canvas:component:notify-ui",
           "title": "Notify UI",
           "dynamics": "mf",
@@ -44,7 +53,7 @@
           "kind": "pure"
         },
         {
-          "beat": 5,
+          "beat": 6,
           "event": "canvas:component:augment:line",
           "title": "Enhance Line (Advanced)",
           "dynamics": "mf",
