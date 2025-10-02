@@ -38,7 +38,15 @@
       "handlersPath": "@renderx-plugins/canvas-component"
     },
     {
-      "file": "drag.json",
+      "file": "drag.start.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "drag.move.json",
+      "handlersPath": "@renderx-plugins/canvas-component"
+    },
+    {
+      "file": "drag.end.json",
       "handlersPath": "@renderx-plugins/canvas-component"
     },
     {
