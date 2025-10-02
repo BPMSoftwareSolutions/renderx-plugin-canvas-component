@@ -2,6 +2,9 @@
   "pluginId": "CanvasComponentDragPlugin",
   "id": "canvas-component-drag-symphony",
   "name": "Canvas Component Drag",
+  "topicMapping": {
+    "routeToBase": true
+  },
   "movements": [
     {
       "id": "drag-move",
