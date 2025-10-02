@@ -3,7 +3,7 @@ import { startResize, updateSize, endResize } from './symphonies/resize/resize.s
 import { showSelectionOverlay, hideSelectionOverlay, routeSelectionRequest, notifyUi as notifyUiSelection, publishSelectionChanged } from './symphonies/select/select.stage-crew';
 import { showSvgNodeOverlay } from './symphonies/select/select.svg-node.stage-crew';
 import { startLineResize, updateLine, endLineResize } from './symphonies/resize-line/resize.line.stage-crew';
-import { updatePosition, forwardToControlPanel } from './symphonies/drag/drag.stage-crew';
+import { startDrag, updatePosition, endDrag, forwardToControlPanel } from './symphonies/drag/drag.stage-crew';
 import { openUiFile } from './symphonies/import/import.file.stage-crew';
 import { parseUiFile } from './symphonies/import/import.parse.pure';
 import { injectCssClasses } from './symphonies/import/import.css.stage-crew';
@@ -47,7 +47,9 @@ export const handlers = {
   publishDeleted,
   routeDeleteRequest: routeDeleteRequestDelete,
   // drag
+  startDrag,
   updatePosition,
+  endDrag,
   forwardToControlPanel,
   // import
   openUiFile,

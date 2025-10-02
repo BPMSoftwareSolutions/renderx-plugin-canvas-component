@@ -59,6 +59,54 @@ export const updatePosition = (data: any, ctx: any) => {
   };
 };
 
+export const startDrag = (data: any, ctx: any) => {
+  const { id } = data;
+
+  if (!id) {
+    ctx.logger?.warn?.("Missing id for drag start");
+    return;
+  }
+
+  // Mark drag in progress globally (for compatibility with existing code)
+  try {
+    (globalThis as any).__cpDragInProgress = true;
+  } catch {}
+
+  // Store drag start info in context
+  ctx.payload.dragStarted = true;
+  ctx.payload.elementId = id;
+
+  return {
+    success: true,
+    elementId: id,
+    phase: "start",
+  };
+};
+
+export const endDrag = (data: any, ctx: any) => {
+  const { id } = data;
+
+  if (!id) {
+    ctx.logger?.warn?.("Missing id for drag end");
+    return;
+  }
+
+  // Clear drag in progress flag
+  try {
+    (globalThis as any).__cpDragInProgress = false;
+  } catch {}
+
+  // Store drag end info in context
+  ctx.payload.dragEnded = true;
+  ctx.payload.elementId = id;
+
+  return {
+    success: true,
+    elementId: id,
+    phase: "end",
+  };
+};
+
 // Forward selection info over to Control Panel (stub for now)
 export const forwardToControlPanel = (_data?: any, _ctx?: any) => {
   // Placeholder to satisfy handler presence checks
@@ -66,4 +114,4 @@ export const forwardToControlPanel = (_data?: any, _ctx?: any) => {
 };
 
 // Export handlers for JSON sequence mounting
-export const handlers = { updatePosition, forwardToControlPanel };
+export const handlers = { startDrag, updatePosition, endDrag, forwardToControlPanel };

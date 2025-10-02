@@ -1,0 +1,14 @@
+{
+  "pluginId": "CanvasComponentDragStartPlugin",
+  "id": "canvas-component-drag-start-symphony",
+  "name": "Canvas Component Drag Start",
+  "movements": [
+    {
+      "id": "drag-start",
+      "name": "Drag Start",
+      "beats": [
+        { "beat": 1, "event": "canvas:component:drag:start", "title": "Drag Start", "dynamics": "mf", "handler": "startDrag", "timing": "immediate", "kind": "stage-crew" }
+      ]
+    }
+  ]
+}

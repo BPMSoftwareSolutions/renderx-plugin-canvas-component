@@ -1,0 +1,14 @@
+{
+  "pluginId": "CanvasComponentDragEndPlugin",
+  "id": "canvas-component-drag-end-symphony",
+  "name": "Canvas Component Drag End",
+  "movements": [
+    {
+      "id": "drag-end",
+      "name": "Drag End",
+      "beats": [
+        { "beat": 1, "event": "canvas:component:drag:end", "title": "Drag End", "dynamics": "mf", "handler": "endDrag", "timing": "immediate", "kind": "stage-crew" }
+      ]
+    }
+  ]
+}

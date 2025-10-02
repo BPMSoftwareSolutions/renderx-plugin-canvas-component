@@ -1,7 +1,7 @@
 {
-  "pluginId": "CanvasComponentDragPlugin",
-  "id": "canvas-component-drag-symphony",
-  "name": "Canvas Component Drag",
+  "pluginId": "CanvasComponentDragMovePlugin",
+  "id": "canvas-component-drag-move-symphony",
+  "name": "Canvas Component Drag Move",
   "topicMapping": {
     "routeToBase": true
   },
@@ -16,4 +16,3 @@
     }
   ]
 }
-
