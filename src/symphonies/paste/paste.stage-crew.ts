@@ -1,6 +1,6 @@
 import { EventRouter, resolveInteraction } from "@renderx-plugins/host-sdk";
 import { getClipboardText } from "../_clipboard";
-import { toCreatePayloadFromData } from "../create/create.from-import";
+import { toCreatePayloadFromData, attachStandardImportInteractions } from "../create/create.from-import";
 
 function _getSelectedId(data: any): string | undefined {
   const overlayId = (document.getElementById("rx-selection-overlay") as HTMLDivElement | null)?.dataset?.targetId;
@@ -117,6 +117,9 @@ export async function createPastedComponent(data: any, ctx: any) {
     payload.position = position;
     // Ensure we do not preserve original ID on paste
     if ("_overrideNodeId" in payload) delete (payload as any)._overrideNodeId;
+
+    // Attach standard interactions so pasted components are draggable/selectable
+    attachStandardImportInteractions(payload, ctx);
 
     const r = resolveInteraction("canvas.component.create");
     ctx?.logger?.info?.("Calling canvas.component.create", { pluginId: r.pluginId, sequenceId: r.sequenceId, payload });

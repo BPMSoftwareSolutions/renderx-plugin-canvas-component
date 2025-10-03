@@ -49,11 +49,18 @@ export function attachStandardImportInteractions(payload: any, ctx: any) {
     try { EventRouter.publish("canvas.component.drag.start", { id: info?.id }, ctx.conductor); } catch {}
   };
   payload.onDragMove = (info: any) => {
-    try { EventRouter.publish("canvas.component.drag.move", { id: info?.id }, ctx.conductor); } catch {}
+    try {
+      const { id, position } = info || {};
+      EventRouter.publish("canvas.component.drag.move", { id, position }, ctx.conductor);
+    } catch {}
   };
   payload.onDragEnd = (info: any) => {
     try { (globalThis as any).__cpDragInProgress = false; } catch {}
-    try { EventRouter.publish("canvas.component.drag.end", { id: info?.id }, ctx.conductor); } catch {}
+    try {
+      const { id, finalPosition, correlationId } = info || {};
+      const position = finalPosition || info?.position;
+      EventRouter.publish("canvas.component.drag.end", { id, position, correlationId }, ctx.conductor);
+    } catch {}
   };
   payload.onSelected = (info: any) => {
     try { EventRouter.publish("canvas.component.selection.changed", { id: info?.id }, ctx.conductor); } catch {}
