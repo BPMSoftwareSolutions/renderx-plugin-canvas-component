@@ -1,7 +1,10 @@
 {
   "pluginId": "CanvasComponentCopyPlugin",
-  "id": "canvas-component-copy-requested-symphony",
-  "name": "Canvas Component Copy Requested",
+  "id": "canvas-component-copy-symphony",
+  "name": "Canvas Component Copy",
+  "topicMapping": {
+    "routeToBase": true
+  },
   "movements": [
     {
       "id": "copy-to-clipboard",

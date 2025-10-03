@@ -110,11 +110,11 @@
       "handlersPath": "@renderx-plugins/canvas-component"
     },
     {
-      "file": "copy.requested.json",
+      "file": "copy.json",
       "handlersPath": "@renderx-plugins/canvas-component"
     },
     {
-      "file": "paste.requested.json",
+      "file": "paste.json",
       "handlersPath": "@renderx-plugins/canvas-component"
     }
   ]

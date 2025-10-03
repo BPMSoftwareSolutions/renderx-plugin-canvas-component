@@ -1,7 +1,10 @@
 {
   "pluginId": "CanvasComponentPastePlugin",
-  "id": "canvas-component-paste-requested-symphony",
-  "name": "Canvas Component Paste Requested",
+  "id": "canvas-component-paste-symphony",
+  "name": "Canvas Component Paste",
+  "topicMapping": {
+    "routeToBase": true
+  },
   "movements": [
     {
       "id": "paste-from-clipboard",

@@ -9,8 +9,8 @@ type Beat = { dynamics?: string } & Record<string, unknown>;
 describe('copy/paste sequences schema (canvas-component)', () => {
   const root = join(process.cwd(), 'json-sequences', 'canvas-component');
   const files = [
-    'copy.requested.json',
-    'paste.requested.json',
+    'copy.json',
+    'paste.json',
   ];
 
   it('every beat declares dynamics', () => {
