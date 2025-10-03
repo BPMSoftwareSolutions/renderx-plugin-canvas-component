@@ -1,56 +1,7 @@
 import { resolveInteraction, EventRouter } from "@renderx-plugins/host-sdk";
+import { transformImportToCreatePayload, attachStandardImportInteractions } from "../create/create.from-import";
 
-/**
- * Transform import component data to canvas.component.create format
- */
-function transformImportDataToCreateFormat(importComponent: any): any {
-  const template: any = {
-    tag: importComponent.tag,
-    classes: importComponent.classRefs || [],
-    style: importComponent.style || {},
-    text: importComponent.content?.text || importComponent.content?.content,
-    // Map other content properties as needed
-    cssVariables: importComponent.cssVariables || {},
-    css: importComponent.css,
-  };
 
-  // Set container role if this is a container component
-  if (
-    importComponent.classRefs &&
-    importComponent.classRefs.includes("rx-container")
-  ) {
-    template.attributes = { "data-role": "container" };
-  }
-
-  // Include content properties if they exist
-  if (
-    importComponent.content &&
-    Object.keys(importComponent.content).length > 0
-  ) {
-    template.content = importComponent.content;
-  }
-
-  // Add dimensions to template if available
-  if (importComponent.layout?.width && importComponent.layout?.height) {
-    template.dimensions = {
-      width: importComponent.layout.width,
-      height: importComponent.layout.height,
-    };
-  }
-
-  return {
-    component: {
-      template,
-    },
-    position: {
-      x: importComponent.layout?.x || 0,
-      y: importComponent.layout?.y || 0,
-    },
-    containerId: importComponent.parentId || undefined,
-    // Override nodeId to preserve imported IDs
-    _overrideNodeId: importComponent.id,
-  };
-}
 
 /**
  * NEW: Sequential component creation handler that uses canvas.component.create
@@ -64,65 +15,11 @@ export async function createComponentsSequentially(_data: any, ctx: any) {
   ctx.payload.createdComponents = [];
 
   for (const comp of components) {
-    // Transform import data to canvas.component.create format
-    const createPayload = transformImportDataToCreateFormat(comp);
+    // Transform import data to canvas.component.create format via shared helper
+    const createPayload = transformImportToCreatePayload(comp);
 
-    // Add interaction handlers (same as library drop flow)
-    createPayload.onDragStart = (info: any) => {
-      // Match CanvasDrop.ts behavior: mark drag in progress
-      try {
-        (globalThis as any).__cpDragInProgress = true;
-      } catch {}
-      // Publish drag.start for subscribers
-      try {
-        EventRouter.publish(
-          "canvas.component.drag.start",
-          { id: info?.id },
-          ctx.conductor
-        );
-      } catch {}
-    };
-
-    createPayload.onDragMove = (info: any) => {
-      // Publish drag.move through EventRouter
-      try {
-        const { id, position } = info || {};
-        EventRouter.publish(
-          "canvas.component.drag.move",
-          { id, position, event: "canvas:component:drag:move" },
-          ctx.conductor
-        );
-      } catch {}
-    };
-
-    createPayload.onDragEnd = (info: any) => {
-      // Match CanvasDrop.ts behavior: clear flag
-      try {
-        (globalThis as any).__cpDragInProgress = false;
-      } catch {}
-      // Publish drag.end for subscribers
-      try {
-        const { id, finalPosition, correlationId } = info || {};
-        // Map finalPosition to position for consistency with other drag handlers
-        const position = finalPosition || info?.position;
-        EventRouter.publish(
-          "canvas.component.drag.end",
-          { id, position, correlationId },
-          ctx.conductor
-        );
-      } catch {}
-    };
-
-    createPayload.onSelected = (info: any) => {
-      // Handle selection for imported components via topics routing
-      try {
-        EventRouter.publish(
-          "canvas.component.selection.changed",
-          { id: info?.id },
-          ctx.conductor
-        );
-      } catch {}
-    };
+    // Attach standard interactions for import-created components
+    attachStandardImportInteractions(createPayload, ctx);
 
     // Call canvas.component.create for each component
     await ctx.conductor?.play?.(r.pluginId, r.sequenceId, createPayload);
